@@ -6,7 +6,7 @@
 int main(int argc, char** argv) {
     int maybe_error, status;
         
-    if (argc != 2) {
+    if (argc < 2) {
         printf("Usage: ./a.out file_name\n");
         return -1;
     }
