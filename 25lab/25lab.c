@@ -33,6 +33,7 @@ int main() {
             }
 
             perror("write ERROR!");
+	    return -1;
         }
 
     }
