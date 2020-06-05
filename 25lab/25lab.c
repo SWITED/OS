@@ -61,6 +61,17 @@ int main() {
         perror("Close ERROR3");
         return -1;
     }
+    if(close(fd[1]) == -1) {
+        perror("Close ERROR4");
+        return -1;
+    }
+    if (wait(NULL) == -1) {
+        perror("wait ERROR");
+    }
+    if (wait(NULL) == -1) {
+        perror("wait failed");
+    }
+
     
     return 0;
 }
