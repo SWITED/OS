@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sys/wait.h>
 #define BUFFER_SIZE 256
 
 int main(int argc, char **argv) {
@@ -30,8 +31,13 @@ int main(int argc, char **argv) {
             }
 
         }
-
-        fclose(fin);
-        pclose(fout);
-        return 0;
+        if(fclose(fin) == -1) {
+            perror("Close ERROR");
+            return -1;
+        }
+        int peclose = pclose(fout);
+        if (WIFEXITED(peclose) != 0 && WEXITSTATUS(peclose) == 0) {
+            return 0;
+        }
+        return -1;
 }
