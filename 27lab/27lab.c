@@ -1,43 +1,45 @@
 #include <stdio.h>
 #include <sys/wait.h>
-#define BUFFER_SIZE 256
+#define BUFFER_SIZE 100
 
 int main(int argc, char **argv) {
-        FILE *fin, *fout;
+        FILE *fin;
+        char buff[BUFFER_SIZE];
+        int ret;
 
         if(argc < 2) {
             fprintf(stderr, "usage: %s filename\n",argv[0]);
             return -1;
         }
     
-        char buff[BUFFER_SIZE];
-
+        snprintf(buff, sizeof(buff), "cat %s | grep '^$' | wc -l", argv[1]);
         if ((fin = fopen(argv[1], "r")) == NULL) {
-                perror("fopen ERROR");
+                perror("fopen ERROR:STR15");
                 return -1;
         }
         
-        fout = popen("wc -l", "w");
+        fin = popen(buff, "r");
 
-        if(fout == NULL) {
-            perror("popen ERROR");
+        if(fin == NULL) {
+            perror("popen ERROR:STR20");
             return -1;
         }
-        
-        while (fgets(buff, BUFFER_SIZE, fin) != NULL) {
+        fscanf(fin, "%d", &ret);
 
-            if (buff[0] == '\n') {
-                fputs(buff, fout);
-            }
+        int stat = pclose(fin);
 
-        }
-        if(fclose(fin) == -1) {
-            perror("Close ERROR");
+        if (WIFEXITED(stat) == 0 ) {
+            fprintf(stderr,"plose ERROR1 stat : %d : STR29", stat); 
             return -1;
         }
-        int peclose = pclose(fout);
-        if (WIFEXITED(peclose) != 0 && WEXITSTATUS(peclose) == 0) {
-            return 0;
-        }
-        return -1;
+        if (WEXITSTATUS(stat) != 0) {
+            fprintf(stderr,"plose ERROR2 stat : %d : STR29", stat); 
+            return -1;
+        }          
+        printf("answer : %d\n", ret);
+        return 0;
 }
+
+        
+
+
