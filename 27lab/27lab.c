@@ -23,6 +23,10 @@ int main(int argc, char **argv) {
         fscanf(fin, "%d", &ret);
 
         int stat = pclose(fin);
+        if(stat = -1){
+            perror("pclose ERROR : STR25");
+            return -1;
+        }
 
         if (WIFEXITED(stat) == 0 ) {
             fprintf(stderr,"plose ERROR1 stat : %d : STR29", stat); 
