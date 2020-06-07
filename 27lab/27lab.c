@@ -13,10 +13,6 @@ int main(int argc, char **argv) {
         }
     
         snprintf(buff, sizeof(buff), "cat %s | grep '^$' | wc -l", argv[1]);
-        if ((fin = fopen(argv[1], "r")) == NULL) {
-                perror("fopen ERROR:STR15");
-                return -1;
-        }
         
         fin = popen(buff, "r");
 
